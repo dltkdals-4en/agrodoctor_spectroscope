@@ -2,6 +2,7 @@ import 'package:ctgformanager/blue_app.dart';
 import 'package:ctgformanager/blue_case.dart';
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
 import 'package:ctgformanager/bluetooth_connect/no_item_page.dart';
+import 'package:ctgformanager/bluetooth_connect/test_wifi.dart';
 import 'package:ctgformanager/registration/regist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,52 +25,20 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BlueCase(),
+                          builder: (context) => FlutterWifiIoT(),
                         ));
                   },
-                  child: Text('모든 기기 스캔'),
-                ),
-                // ElevatedButton(onPressed: () {
-                //   Navigator.push(context, MaterialPageRoute(builder: (context) => BlelibCase(),));
-                // }, child: Text('FlutterBleLib'),),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BlueApp(),
-                        ));
-                  },
-                  child: Text('Bluetooth Serial'),
+                  child: Text('test wifi'),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RegistScreen(),
-                        ));
-                  },
-                  child: Text('모르는 기기 제외'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => FindBluetooth(),
-                        ));
-                  },
-                  child: Text('블루투스 찾기'),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      blueProvider.getPairingList();
+                    onPressed: () async {
+                      await blueProvider.getPairingList();
                       Navigator.push(
                           context,
                           MaterialPageRoute(

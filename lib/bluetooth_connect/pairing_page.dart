@@ -1,7 +1,8 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
+import 'package:ctgformanager/bluetooth_connect/check_wifi_setting_page.dart';
 import 'package:ctgformanager/bluetooth_connect/pairing_device_widget.dart';
 import 'package:ctgformanager/bluetooth_connect/test_wifi.dart';
-import 'package:ctgformanager/bluetooth_connect/wifi_connect_page.dart';
+import 'package:ctgformanager/bluetooth_connect/wifi_list_page.dart';
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,7 +47,7 @@ class PairingPage extends StatelessWidget {
                             makeTextStyle(16, AppColors.lightPrimary, 'bold')),
                     TextSpan(text: '기에요.'),
                     TextSpan(
-                      text: '\n(추가 기기를 등록하고 싶으시다면 우측 상단의 새로고침 버튼을 클릭해주세요.)',
+                      text: '\n(추가 기기를 등록하고 싶으시다면 우측 상단의 기기찾기 버튼을 클릭해주세요.)',
                       style: makeTextStyle(
                         16,
                         AppColors.black,
@@ -74,14 +75,16 @@ class PairingPage extends StatelessWidget {
           Container(
             width: size.width,
             height: BUTTONHEIGHT,
-            child: ElevatedButton(onPressed: () {
-              provider.getWifiList();
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WifiConnectPage(),
-                  ));
-            }, child: Text('다음 단계')),
+            child: ElevatedButton(
+                onPressed: () async {
+                  await provider.checkWifiEnabled();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckWifiSettingPage(),
+                      ));
+                },
+                child: Text('다음 단계')),
           )
         ],
       ),

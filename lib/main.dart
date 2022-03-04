@@ -40,15 +40,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'NotoSansKR',
         textTheme: TextTheme(
-          bodyText2: TextStyle(fontSize: 18),
+          headline6: makeTextStyle(20, AppColors.black, 'bold'),
+          subtitle1: makeTextStyle(16, AppColors.black, 'medium'),
         ),
         appBarTheme: AppBarTheme(
             centerTitle: true,
-            toolbarTextStyle: makeTextStyle(18, AppColors.black, 'bold'),
+            toolbarTextStyle: makeTextStyle(20, AppColors.black, 'bold'),
             color: AppColors.white,
-            titleTextStyle:
-                // TextStyle(fontSize: 18, color: AppColors.black, fontWeight: FontWeight.bold)
-                makeTextStyle(18, AppColors.black, 'bold'),
+            titleTextStyle: makeTextStyle(20, AppColors.black, 'bold'),
             iconTheme: IconThemeData(
               color: AppColors.black,
             ),
@@ -56,16 +55,19 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             primary: AppColors.lightPrimary,
-            textStyle: makeTextStyle(18, AppColors.white, 'bold'),
+            textStyle: makeTextStyle(16, AppColors.white, 'bold'),
           ),
         ),
+        listTileTheme: ListTileThemeData(
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: NORMALGAP, vertical: SMALLGAP),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(SMALLGAP),
+          ),
+          tileColor: AppColors.white,
+          textColor: AppColors.black,
+        ),
       ),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-          child: child!,
-        );
-      },
     );
   }
 }
