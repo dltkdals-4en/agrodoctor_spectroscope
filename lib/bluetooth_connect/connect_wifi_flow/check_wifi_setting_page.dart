@@ -1,5 +1,5 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
-import 'package:ctgformanager/bluetooth_connect/wifi_list_page.dart';
+import 'package:ctgformanager/bluetooth_connect/connect_wifi_flow/wifi_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

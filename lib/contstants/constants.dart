@@ -47,3 +47,8 @@ makeTextStyle(double fontSize, Color? fontColor,
     height: height,
   );
 }
+enum DataType{
+  EMPTY,
+  RESULT,
+  DEVICE,
+}

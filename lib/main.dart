@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'NotoSansKR',
         textTheme: TextTheme(
           headline6: makeTextStyle(20, AppColors.black, 'bold'),
-          subtitle1: makeTextStyle(16, AppColors.black, 'medium'),
+          subtitle1: makeTextStyle(16, AppColors.black, 'bold'),
         ),
         appBarTheme: AppBarTheme(
             centerTitle: true,

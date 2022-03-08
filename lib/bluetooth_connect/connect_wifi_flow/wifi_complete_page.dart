@@ -1,5 +1,5 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
-import 'package:ctgformanager/bluetooth_connect/pairing_device_widget.dart';
+import 'package:ctgformanager/bluetooth_connect/connect_ble_flow/pairing_device/pairing_device_widget.dart';
 import 'package:ctgformanager/bluetooth_connect/setting_args_page.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -23,19 +23,19 @@ class WifiComplete extends StatelessWidget {
             Text('연결할 기기를 선택해주세요.'),
             Expanded(
                 child: ListView.builder(
-              itemCount: provider.paringDevices.length,
+              itemCount: provider.pairingDevices.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                     onTap: () {
                       provider
-                          .selectDeviceSetting(provider.paringDevices[index]);
+                          .selectDeviceSetting(provider.pairingDevices[index]);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => SettingArgsPage(),
                           ));
                     },
-                    child: PairingDeviceWidget(provider.paringDevices[index]));
+                    child: PairingDeviceWidget(provider.pairingDevices[index]));
               },
             ))
           ],

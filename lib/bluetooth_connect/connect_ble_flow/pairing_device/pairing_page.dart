@@ -1,8 +1,7 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
-import 'package:ctgformanager/bluetooth_connect/check_wifi_setting_page.dart';
-import 'package:ctgformanager/bluetooth_connect/pairing_device_widget.dart';
-import 'package:ctgformanager/bluetooth_connect/test_wifi.dart';
-import 'package:ctgformanager/bluetooth_connect/wifi_list_page.dart';
+import 'package:ctgformanager/bluetooth_connect/connect_wifi_flow/check_wifi_setting_page.dart';
+import 'package:ctgformanager/bluetooth_connect/connect_ble_flow/find_ble/find_ble_page.dart';
+import 'package:ctgformanager/bluetooth_connect/connect_ble_flow/pairing_device/pairing_device_widget.dart';
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,8 +20,10 @@ class PairingPage extends StatelessWidget {
         title: Text('기기 연결하기'),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.replay_rounded),
+            onPressed: () {
+                provider.getPairingList();
+            },
+            icon: Icon(Icons.replay),
           ),
         ],
       ),
@@ -38,13 +39,13 @@ class PairingPage extends StatelessWidget {
               child: RichText(
                 softWrap: true,
                 text: TextSpan(
-                  style: makeTextStyle(16, AppColors.black, 'medium'),
+                  style: makeTextStyle(18, AppColors.black, 'medium'),
                   children: [
                     TextSpan(text: '현재 연결된 CO:AIR 기기는 총 '),
                     TextSpan(
-                        text: '${provider.paringDevices.length}',
+                        text: '${provider.pairingDevices.length}',
                         style:
-                            makeTextStyle(16, AppColors.lightPrimary, 'bold')),
+                            makeTextStyle(18, AppColors.lightPrimary, 'bold')),
                     TextSpan(text: '기에요.'),
                     TextSpan(
                       text: '\n(추가 기기를 등록하고 싶으시다면 우측 상단의 기기찾기 버튼을 클릭해주세요.)',
@@ -65,9 +66,24 @@ class PairingPage extends StatelessWidget {
             child: Container(
               color: AppColors.white,
               child: ListView.builder(
-                itemCount: provider.paringDevices.length,
+                itemCount: provider.pairingDevices.length+1,
                 itemBuilder: (context, index) {
-                  return PairingDeviceWidget(provider.paringDevices[index]);
+                  if(index == provider.pairingDevices.length){
+                    return ListTile(
+                      onTap: () {
+                        provider.findBLeDivices();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FindBlePage(),
+                            ));
+                      },
+                      title: Text('기기 추가하기'),
+                      leading: Icon(Icons.add),
+                    );
+                  }else {
+                    return PairingDeviceWidget(provider.pairingDevices[index]);
+                  }
                 },
               ),
             ),

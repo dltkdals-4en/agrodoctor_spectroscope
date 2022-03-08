@@ -1,5 +1,5 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
-import 'package:ctgformanager/bluetooth_connect/wifi_listtile_widget.dart';
+import 'package:ctgformanager/bluetooth_connect/connect_wifi_flow/wifi_listtile_widget.dart';
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 
@@ -23,8 +23,10 @@ class WifiListPage extends StatelessWidget {
                 width: size.width,
                 child: Padding(
                   padding: const EdgeInsets.all(NORMALGAP),
-                  child:
-                      Text('현재 CO:AIR는 5G를 지원하고 있지 않습니다. \nwifi 연결 시 유의해주세요.'),
+                  child: Text(
+                    '현재 CO:AIR는 5G를 지원하고 있지 않습니다. \nwifi 연결 시 유의해주세요.',
+                    style: makeTextStyle(18, AppColors.black, 'regular'),
+                  ),
                 ),
                 color: AppColors.white,
               ),

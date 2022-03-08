@@ -10,7 +10,7 @@ import 'package:wifi_iot/wifi_iot.dart';
 
 class BlueProvider with ChangeNotifier {
   FlutterBluetoothSerial serial = FlutterBluetoothSerial.instance;
-  List<BluetoothDevice> paringDevices = [];
+  List<BluetoothDevice> pairingDevices = [];
   List<BluetoothDiscoveryResult> bleDevices =
       List<BluetoothDiscoveryResult>.empty(growable: true);
   List<WifiNetwork> wifiList = [];
@@ -38,7 +38,6 @@ class BlueProvider with ChangeNotifier {
           (element) => element.device.address == event.device.address);
       if (existingIndex >= 0) {
         bleDevices[existingIndex] = event;
-
       } else {
         var deviceName =
             (event.device.name != null) ? event.device.name : '알 수 없는 기기';
@@ -51,7 +50,8 @@ class BlueProvider with ChangeNotifier {
       notifyListeners();
     });
   }
-  void resetBleDevices(){
+
+  void resetBleDevices() {
     bleDiscovering = true;
     notifyListeners();
     bleDevices.clear();
@@ -60,10 +60,11 @@ class BlueProvider with ChangeNotifier {
 
   Future<void> getPairingList() async {
     serial.getBondedDevices().then((List<BluetoothDevice> bondedDevices) {
-      paringDevices = bondedDevices
+      pairingDevices = bondedDevices
           .where((element) => element.name!.contains('fouren'))
           .toList();
-      print(paringDevices);
+      print(pairingDevices);
+      notifyListeners();
     });
   }
 
@@ -221,6 +222,18 @@ class BlueProvider with ChangeNotifier {
     for (var value in listStr) {
       sendData(value);
       receiveData();
+    }
+  }
+
+  String setBondedText(bool isBonded) {
+    return (isBonded) ? '페어링 됨' : '페어링 안됨';
+  }
+
+  Future<void> devicePairing() async {
+    for (var value in bleDevices) {
+      if (!value.device.isBonded)
+        await serial.bondDeviceAtAddress(value.device.address);
+      notifyListeners();
     }
   }
 }

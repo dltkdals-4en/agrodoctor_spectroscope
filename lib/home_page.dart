@@ -1,14 +1,9 @@
-import 'package:ctgformanager/blue_app.dart';
-import 'package:ctgformanager/blue_case.dart';
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
 import 'package:ctgformanager/bluetooth_connect/no_item_page.dart';
-import 'package:ctgformanager/bluetooth_connect/test_wifi.dart';
-import 'package:ctgformanager/registration/regist_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'bluetoothConnect/find_bluetooth.dart';
-import 'bluetooth_connect/pairing_page.dart';
+import 'bluetooth_connect/connect_ble_flow/pairing_device/pairing_page.dart';
+import 'bluetooth_connect/test_wifi.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,7 +20,6 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -42,7 +36,10 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => (blueProvider.paringDevices.isEmpty)?NoItemPage():PairingPage(),
+                            builder: (context) =>
+                                (blueProvider.pairingDevices.isEmpty)
+                                    ? NoItemPage()
+                                    : PairingPage(),
                           ));
                     },
                     child: Text('BLE UI'))
