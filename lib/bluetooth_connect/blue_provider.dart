@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:ctgformanager/contstants/constants.dart';
+import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
@@ -21,6 +24,8 @@ class BlueProvider with ChangeNotifier {
   bool wifiConnected = false;
   bool bleDiscovering = true;
   bool bleConnected = false;
+  List<bool> wifiCheck = [];
+  FToast? fToast;
   bool wifiObscure = true;
   Icon wifiObscureIcon = Icon(Icons.visibility_off);
   NetworkSecurity default_security = NetworkSecurity.NONE;
@@ -31,6 +36,15 @@ class BlueProvider with ChangeNotifier {
     '\$getWifiInfo();',
     '\$getUrlInfo();',
   ];
+  List<String> resultDataString = [];
+  List<String> apiDataList = [];
+  List<String> wifiDataList = [];
+  List<String> fanSpeedList = [];
+  bool settingComplete = false;
+  TextEditingController? btn1TextController;
+  TextEditingController? btn2TextController;
+  TextEditingController? btn3TextController;
+  List<TextEditingController> apiSettingTextControllerList = [];
 
   void findBLeDivices() {
     serial.startDiscovery().listen((event) {
@@ -77,11 +91,13 @@ class BlueProvider with ChangeNotifier {
             '${element.ssid} / ${element.bssid} / ${element.capabilities} /${element.frequency}/${element.level}');
       });
       wifiList.removeWhere((element) => element.frequency! > 5000);
-      print(wifiList);
+      notifyListeners();
     } on PlatformException {
       wifiList = <WifiNetwork>[];
       print('no wifiList');
+      notifyListeners();
     }
+
     return wifiList;
   }
 
@@ -91,8 +107,15 @@ class BlueProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setWifiSsid(String s) {
-    wifiSsid = s;
+  setWifiSsid(String s) async {
+    wifiCheck.clear();
+    await getWifiList().then((value) => value.forEach((element) {
+          print(element.ssid);
+          wifiCheck.add(element.ssid!.contains(s));
+        }));
+    print(wifiCheck);
+    if (wifiCheck.contains(true)) wifiSsid = s;
+    notifyListeners();
   }
 
   void setWifiObscure() {
@@ -136,7 +159,9 @@ class BlueProvider with ChangeNotifier {
             password: wifiSspw,
             security: NetworkSecurity.WPA,
             isHidden: true)
-        .whenComplete(() => checkWifiConnected());
+        .whenComplete(() {
+      checkWifiConnected();
+    });
   }
 
   Future<void> setWifiSetting() async {
@@ -159,6 +184,9 @@ class BlueProvider with ChangeNotifier {
       } else {
         print('블루투스 연결 실패');
       }
+      connection!.input!.listen((event) {
+        _onDataReceived(event);
+      });
     });
   }
 
@@ -177,12 +205,6 @@ class BlueProvider with ChangeNotifier {
 
       }
     }
-  }
-
-  receiveData() {
-    connection!.input!.listen((event) {
-      _onDataReceived(event);
-    });
   }
 
   String _onDataReceived(Uint8List data) {
@@ -212,8 +234,7 @@ class BlueProvider with ChangeNotifier {
 
     // Create message if there is new line character
     String dataString = String.fromCharCodes(buffer);
-
-    print(dataString);
+    splitDataString(dataString);
     return dataString;
     int index = buffer.indexOf(13);
   }
@@ -221,7 +242,6 @@ class BlueProvider with ChangeNotifier {
   sendListData() {
     for (var value in listStr) {
       sendData(value);
-      receiveData();
     }
   }
 
@@ -235,5 +255,62 @@ class BlueProvider with ChangeNotifier {
         await serial.bondDeviceAtAddress(value.device.address);
       notifyListeners();
     }
+  }
+
+  splitDataString(String s) async {
+    var result = s.split(';');
+    print(result);
+    for (var i = 0; i < result.length - 1; i++) {
+      var identify = result[i].substring(0, 4);
+      var data = result[i].substring(5, result[i].length - 1);
+      print(data);
+      switch (identify) {
+        case '\$103':
+          apiDataList = data.split(',');
+          notifyListeners();
+          break;
+        case '\$102':
+          wifiDataList = data.split(',');
+          notifyListeners();
+          break;
+        case '\$104':
+          fanSpeedList = data.split(',');
+          notifyListeners();
+          break;
+      }
+    }
+    if (apiDataList.isNotEmpty) settingComplete = true;
+    notifyListeners();
+  }
+
+  void customToast(size, context, String s) {
+    var inputText = s;
+
+    fToast = FToast();
+    fToast?.init(context);
+    Widget toast = Container(
+      width: size.width - NORMALGAP * 2,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: AppColors.darkGrey,
+      ),
+      height: BUTTONHEIGHT,
+      child: Center(
+        child: Text(
+          inputText,
+          style: makeTextStyle(16, AppColors.white, 'bold'),
+        ),
+      ),
+    );
+    fToast!.showToast(
+      child: toast,
+      positionedToastBuilder: (context, child) {
+        return Positioned(
+          child: child,
+          bottom: 120,
+          left: 20,
+        );
+      },
+    );
   }
 }

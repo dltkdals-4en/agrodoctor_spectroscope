@@ -1,5 +1,7 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
+import 'package:ctgformanager/bluetooth_connect/connect_wifi_flow/wifi_input_info.dart';
 import 'package:ctgformanager/bluetooth_connect/connect_wifi_flow/wifi_listtile_widget.dart';
+import 'package:ctgformanager/bluetooth_connect/make_listtile_widget.dart';
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 
@@ -13,10 +15,8 @@ class WifiListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<BlueProvider>(context);
     var size = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: provider.getWifiList(),
-        builder: (context, snapshot) {
-          return Column(
+
+    return  Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
@@ -37,7 +37,27 @@ class WifiListPage extends StatelessWidget {
                 child: ListView.separated(
                   itemCount: provider.wifiList.length,
                   itemBuilder: (context, index) {
-                    return WifiListTileWidget(index);
+                    return MakeListTileWidget(
+                      context: context,
+                      index: index,
+                      TileData: TileData.WIFI,
+                      onTap: () async {
+
+                        await provider
+                            .setWifiSsid(provider.wifiList[index].ssid!);
+                        (provider.wifiCheck.contains(true))
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => WifiInputInfo(
+                                    (provider.wifiList[index]),
+                                  ),
+                                ),
+                              )
+                            : provider.customToast(
+                                size, context, '해당 와이파이가 없습니다. 다시 시도해주세요.');
+                      },
+                    );
                   },
                   separatorBuilder: (context, index) {
                     return SizedBox(
@@ -48,6 +68,6 @@ class WifiListPage extends StatelessWidget {
               ),
             ],
           );
-        });
+
   }
 }

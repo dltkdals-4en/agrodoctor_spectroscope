@@ -1,4 +1,6 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
+import 'package:ctgformanager/bluetooth_connect/make_listtile_widget.dart';
+import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/loading_screen.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,12 @@ class FindBleListViewWidget extends StatelessWidget {
         child: ListView.separated(
           itemCount: provider.bleDevices.length,
           itemBuilder: (context, index) {
-            return BleListTileWidget(index);
+            return MakeListTileWidget(
+              context: context,
+              index: index,
+              TileData: TileData.BLE,
+              onTap: () {},
+            );
           },
           separatorBuilder: (context, index) {
             return SizedBox(

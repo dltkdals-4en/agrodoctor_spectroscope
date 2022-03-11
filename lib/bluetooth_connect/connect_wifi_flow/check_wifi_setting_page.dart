@@ -29,18 +29,21 @@ class CheckWifiSettingPage extends StatelessWidget {
             return CircularProgressIndicator();
           } else {
             print(snapshot.data);
-            return (snapshot.data== true)
-                ? WifiListPage()
-                : Column(
-                    children: [
-                      Text('wifi가 켜져있지 않아요.\n아래 버튼을 눌러 설정창 이동 후 wifi를 켜주세요.'),
-                      ElevatedButton(
-                          onPressed: () {
-                            provider.enableWifi();
-                          },
-                          child: Text('wifi 설정하기'))
-                    ],
-                  );
+            if (snapshot.data == true) {
+              provider.getWifiList();
+              return WifiListPage();
+            } else {
+              return Column(
+                children: [
+                  Text('wifi가 켜져있지 않아요.\n아래 버튼을 눌러 설정창 이동 후 wifi를 켜주세요.'),
+                  ElevatedButton(
+                      onPressed: () {
+                        provider.enableWifi();
+                      },
+                      child: Text('wifi 설정하기'))
+                ],
+              );
+            }
           }
         },
       ),

@@ -39,29 +39,27 @@ class _LoadingScreenState extends State<LoadingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-          child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return Stack(
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: animation.value),
-              ),
-              Image.asset(
-                'assets/images/logo/loading_logo.png',
-                width: 50,
-                height: 50,
-              )
-            ],
-          );
-        },
-      )),
-    );
+    return Center(
+        child: AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        return Stack(
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: animation.value),
+            ),
+            Image.asset(
+              'assets/images/logo/loading_logo.png',
+              width: 50,
+              height: 50,
+            )
+          ],
+        );
+      },
+    ));
   }
 }

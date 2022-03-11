@@ -1,6 +1,8 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
 import 'package:ctgformanager/bluetooth_connect/connect_ble_flow/pairing_device/pairing_device_widget.dart';
-import 'package:ctgformanager/bluetooth_connect/setting_args_page.dart';
+import 'package:ctgformanager/bluetooth_connect/make_listtile_widget.dart';
+import 'package:ctgformanager/bluetooth_connect/setting_sensor_flow/setting_args_page.dart';
+import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,22 +24,26 @@ class WifiComplete extends StatelessWidget {
             Text('연결된 와이파이: ${provider.wifiSsid}'),
             Text('연결할 기기를 선택해주세요.'),
             Expanded(
-                child: ListView.builder(
-              itemCount: provider.pairingDevices.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
+              child: ListView.builder(
+                itemCount: provider.pairingDevices.length,
+                itemBuilder: (context, index) {
+                  return MakeListTileWidget(
+                    context: context,
+                    index: index,
+                    TileData: TileData.PAIRING,
                     onTap: () {
-                      provider
+                       provider
                           .selectDeviceSetting(provider.pairingDevices[index]);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SettingArgsPage(),
+                            builder: (context) => SettingArgsPage(provider.pairingDevices[index]),
                           ));
                     },
-                    child: PairingDeviceWidget(provider.pairingDevices[index]));
-              },
-            ))
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

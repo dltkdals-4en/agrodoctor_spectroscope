@@ -2,6 +2,7 @@ import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
 import 'package:ctgformanager/bluetooth_connect/connect_wifi_flow/check_wifi_setting_page.dart';
 import 'package:ctgformanager/bluetooth_connect/connect_ble_flow/find_ble/find_ble_page.dart';
 import 'package:ctgformanager/bluetooth_connect/connect_ble_flow/pairing_device/pairing_device_widget.dart';
+import 'package:ctgformanager/bluetooth_connect/make_listtile_widget.dart';
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:flutter/cupertino.dart';
@@ -82,7 +83,12 @@ class PairingPage extends StatelessWidget {
                       leading: Icon(Icons.add),
                     );
                   }else {
-                    return PairingDeviceWidget(provider.pairingDevices[index]);
+                    return MakeListTileWidget(
+                      context: context,
+                      index: index,
+                      TileData: TileData.PAIRING,
+                      onTap: () {},
+                    );
                   }
                 },
               ),

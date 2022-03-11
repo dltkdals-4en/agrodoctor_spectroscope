@@ -47,8 +47,9 @@ makeTextStyle(double fontSize, Color? fontColor,
     height: height,
   );
 }
-enum DataType{
+enum TileData{
   EMPTY,
-  RESULT,
-  DEVICE,
+  BLE,
+  PAIRING,
+  WIFI,
 }
