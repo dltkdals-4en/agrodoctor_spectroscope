@@ -70,17 +70,18 @@ class WifiInputInfo extends StatelessWidget {
                   height: BUTTONHEIGHT,
                   child: ElevatedButton(
                     onPressed: () async {
-                      await provider.connectWifi(wifiData.bssid!);
-                      if (provider.wifiConnected == true) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WifiComplete(),
-                            ),
-                            (route) => false);
-                      } else {
-                        print('no');
-                      }
+                      await provider.connectWifi(wifiData.bssid!).then((value) {
+                        if (provider.wifiConnected == true) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WifiComplete(),
+                              ),
+                              (route) => false);
+                        } else {
+                          print('no');
+                        }
+                      });
                     },
                     child: Text('와이파이 연결하기'),
                   ),

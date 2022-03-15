@@ -91,11 +91,11 @@ class BlueProvider with ChangeNotifier {
             '${element.ssid} / ${element.bssid} / ${element.capabilities} /${element.frequency}/${element.level}');
       });
       wifiList.removeWhere((element) => element.frequency! > 5000);
-      notifyListeners();
+
     } on PlatformException {
       wifiList = <WifiNetwork>[];
+
       print('no wifiList');
-      notifyListeners();
     }
 
     return wifiList;
@@ -135,6 +135,7 @@ class BlueProvider with ChangeNotifier {
     });
     print('wifi a : ${await WiFiForIoTPlugin.isConnected()}');
     print('wifi : $wifiEnabled');
+
     return wifiEnabled;
   }
 
@@ -142,13 +143,21 @@ class BlueProvider with ChangeNotifier {
     WiFiForIoTPlugin.setEnabled(true, shouldOpenSettings: true);
   }
 
-  Future<bool> checkWifiConnected() async {
-    await WiFiForIoTPlugin.isConnected().then((value) {
+  bool checkWifiConnected() {
+    WiFiForIoTPlugin.isConnected().then((value) {
       wifiConnected = value;
     });
     if (wifiConnected) setWifiSetting();
     print(wifiConnected);
+    notifyListeners();
     return wifiConnected;
+  }
+
+  check() {
+    WiFiForIoTPlugin.isConnected().then((value) {
+      wifiConnected = value;
+      notifyListeners();
+    });
   }
 
   Future<void> connectWifi(String bssid) async {

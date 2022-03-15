@@ -98,8 +98,8 @@ class PairingPage extends StatelessWidget {
             width: size.width,
             height: BUTTONHEIGHT,
             child: ElevatedButton(
-                onPressed: () async {
-                  await provider.checkWifiEnabled();
+                onPressed: (){
+                  provider.checkWifiEnabled();
                   Navigator.push(
                       context,
                       MaterialPageRoute(

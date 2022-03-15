@@ -1,4 +1,7 @@
 import 'package:ctgformanager/bluetooth_connect/blue_provider.dart';
+import 'package:ctgformanager/bluetooth_connect/setting_sensor_flow/registering_shop_widget.dart';
+import 'package:ctgformanager/bluetooth_connect/setting_sensor_flow/seleted_device_info.dart';
+import 'package:ctgformanager/bluetooth_connect/setting_sensor_flow/wifi_info_widget.dart';
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/loading_screen.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
@@ -39,51 +42,17 @@ class SettingArgsPage extends StatelessWidget {
       ),
       body: (provider.settingComplete)
           ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${pairingDevice.name}',
-                style: makeTextStyle(18, AppColors.black, 'bold'),
-              ),
-              SizedBox(
-                height: NORMALGAP,
-              ),
-              Text(
-                '매장 등록',
-                style: makeTextStyle(16, AppColors.black, 'medium'),
-              ),
-              SizedBox(
-                height: SMALLGAP,
-              ),
-              Text('등록하기'),
-              SizedBox(
-                height: NORMALGAP,
-              ),
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'wifi 정보',
-                      style: makeTextStyle(16, AppColors.black, 'medium'),
-                    ),
-                    SizedBox(
-                      height: SMALLGAP,
-                    ),
-                    Row(
-                      children: [
-                        Text('${provider.wifiSsid}'),
-                      ],
-                    )
-                  ],
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SelectedDeviceInfo(pairingDevice),
+                SizedBox(
+                  height: SMALLGAP,
                 ),
-              ),
-              SizedBox(
-                height: NORMALGAP,
-              ),
-              ApiInfoWidget(),
-            ],
-          )
+                RegistreingShopWidget(),
+                WifiInfoWidget(),
+                ApiInfoWidget(),
+              ],
+            )
           : LoadingScreen(),
     );
   }

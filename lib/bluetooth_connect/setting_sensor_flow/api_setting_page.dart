@@ -14,52 +14,55 @@ class ApiSettingPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('api 정보 변경'),
         actions: [
-          IconButton(
+          TextButton(
             onPressed: () {},
-            icon: Icon(Icons.save),
+            child: Text(
+              '수정하기',
+              style: makeTextStyle(16, AppColors.lightPrimary, 'medium'),
+            ),
           ),
         ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: AppColors.red,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(NORMALGAP),
-          child: ListView.separated(
-            itemCount: provider.apiDataList.length,
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '버튼 ${index + 1} api 정보',
-                    style: makeTextStyle(16, AppColors.black, 'bold'),
-                  ),
-                  SizedBox(
-                    height: SMALLGAP,
-                  ),
-                  TextFormField(
-                    controller: provider.btn1TextController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: AppColors.whiteGrey,
-                      border: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppColors.darkGrey, width: 2),
-                      ),
-                      hintText: '${provider.apiDataList[index]}',
+      body: Padding(
+        padding: const EdgeInsets.all(NORMALGAP),
+        child: ListView.separated(
+          itemCount: provider.apiDataList.length,
+          itemBuilder: (context, index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '버튼 ${index + 1} api 정보',
+                  style: makeTextStyle(16, AppColors.black, 'bold'),
+                ),
+                SizedBox(
+                  height: SMALLGAP,
+                ),
+                TextFormField(
+                  controller: provider.btn1TextController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColors.whiteGrey,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: AppColors.lightPrimary, width: 2),
                     ),
+                    border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: AppColors.darkGrey, width: 2),
+                    ),
+                    hintText: '${provider.apiDataList[index]}',
                   ),
-                ],
-              );
-            },
-            separatorBuilder: (context, index) {
-              return SizedBox(
-                height: NORMALGAP,
-              );
-            },
-          ),
+                  cursorColor: AppColors.lightPrimary,
+                ),
+              ],
+            );
+          },
+          separatorBuilder: (context, index) {
+            return SizedBox(
+              height: NORMALGAP,
+            );
+          },
         ),
       ),
     );

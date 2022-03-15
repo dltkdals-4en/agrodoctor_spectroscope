@@ -13,39 +13,51 @@ class WifiComplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<BlueProvider>(context);
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(NORMALGAP),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('와이파이 연결이 완료되었습니다.'),
-            Text('연결된 와이파이: ${provider.wifiSsid}'),
-            Text('연결할 기기를 선택해주세요.'),
-            Expanded(
-              child: ListView.builder(
-                itemCount: provider.pairingDevices.length,
-                itemBuilder: (context, index) {
-                  return MakeListTileWidget(
-                    context: context,
-                    index: index,
-                    TileData: TileData.PAIRING,
-                    onTap: () {
-                       provider
-                          .selectDeviceSetting(provider.pairingDevices[index]);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SettingArgsPage(provider.pairingDevices[index]),
-                          ));
-                    },
-                  );
-                },
+      appBar: AppBar(
+        title: Text('기기 선택하기'),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: size.width,
+            color: AppColors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(NORMALGAP),
+              child: Text(
+                '와이파이 연결이 완료되었습니다. \n연결된 와이파이: ${provider.wifiSsid}\n설정하실 기기를 선택해주세요.',
+                style: makeTextStyle(16, AppColors.black, 'medium'),
               ),
             ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: SMALLGAP,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: provider.pairingDevices.length,
+              itemBuilder: (context, index) {
+                return MakeListTileWidget(
+                  context: context,
+                  index: index,
+                  TileData: TileData.PAIRING,
+                  onTap: () {
+                    provider
+                        .selectDeviceSetting(provider.pairingDevices[index]);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SettingArgsPage(provider.pairingDevices[index]),
+                        ));
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
