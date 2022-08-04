@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
-        android:label="ctgformanager"
+        android:label="agrodoctorSpectroscope"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
