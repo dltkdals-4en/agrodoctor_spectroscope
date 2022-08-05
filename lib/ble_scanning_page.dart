@@ -35,6 +35,7 @@ class BleScanningPage extends StatelessWidget {
                     title: Text('${device.name ?? "알 수 없는 기기"}'),
                     subtitle: Text((device.isBonded) ? '페어링 O' : '페어링 X'),
                     onTap: () async {
+                      bleProvider.setSelectedDivice(device);
                       bleProvider.selectedIndex = index;
                       if (!device.isBonded) {
                         await bleProvider

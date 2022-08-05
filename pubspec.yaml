@@ -39,6 +39,8 @@ dependencies:
   rxdart: ^0.26.0
   rename: ^2.0.1
   flutter_blue: ^0.8.0
+  gsheets: ^0.4.2
+  flutter_keyboard_size: ^1.0.0+4
 
 dev_dependencies:
   flutter_test:

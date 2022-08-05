@@ -5,15 +5,18 @@
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/loading_widget.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
+import 'package:ctgformanager/get_pairing_devices.dart';
 import 'package:ctgformanager/providers/ble_provider.dart';
+import 'package:ctgformanager/providers/gsheets_provider.dart';
 import 'package:ctgformanager/providers/protocol_provider.dart';
+import 'package:ctgformanager/providers/setting_page_ui_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import 'home_page.dart';
+import 'get_ble_devices.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,12 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<ProtocolProvider>(
           create: (_) => ProtocolProvider(),
+        ),
+        ChangeNotifierProvider<SettingPageUiProvider>(
+          create: (_) => SettingPageUiProvider(),
+        ),
+        ChangeNotifierProvider<GsheetsProvider>(
+          create: (_) =>GsheetsProvider(),
         ),
       ],
       child: MyApp(),
@@ -44,7 +53,7 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MaterialApp(
             color: Colors.lightBlue,
-            home: HomePage(),
+            home: GetPairingDevices(),
             theme: ThemeData(
               fontFamily: 'NotoSansKR',
               textTheme: TextTheme(
