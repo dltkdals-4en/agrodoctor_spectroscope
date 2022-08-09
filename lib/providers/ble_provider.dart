@@ -15,6 +15,8 @@ class BleProvider with ChangeNotifier {
   BluetoothConnection? connection;
   bool bleConnected = false;
   int? selectedIndex;
+  List<String>  outputList =[];
+  String outputText = "출력값이 없습니다.";
 
   void scanBle() {
     serial.startDiscovery().listen((event) {
@@ -26,10 +28,9 @@ class BleProvider with ChangeNotifier {
         var deviceName =
             (event.device.name != null) ? event.device.name : '알 수 없는 기기';
 
-        // if (deviceName!.contains('fourenIoT')) {
-
-        bleDevices.add(event);
-        // }
+        if (deviceName!.contains('AgroSPM')) {
+          bleDevices.add(event);
+        }
       }
     }).onDone(() {
       findBleDevices = true;
@@ -54,24 +55,26 @@ class BleProvider with ChangeNotifier {
           print('블루투스 연결 실패');
         }
         connection!.input!.listen((event) {
-          print('listen event');
-          _onDataReceived(event);
+          outputList.clear();
+          if(outputList.isEmpty) {
+            _onDataReceived(event);
+            notifyListeners();
+          }
         });
       });
     } else {
       print('none1');
       bleConnected = false;
-      if(connection != null) {
+      if (connection != null) {
         connection!.dispose();
         print('none2');
         connection = null;
-
       }
       notifyListeners();
     }
   }
 
-  Future sendData(String str) async {
+  Future<void> sendData(String str) async {
     String sendStr = '$str\r\n';
     print(sendStr);
     var i = Uint8List.fromList(utf8.encode(sendStr));
@@ -93,6 +96,7 @@ class BleProvider with ChangeNotifier {
 
   String _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
+    print('data : $data');
     int backspacesCounter = 0;
     data.forEach((byte) {
       if (byte == 8 || byte == 127) {
@@ -117,9 +121,11 @@ class BleProvider with ChangeNotifier {
     }
 
     // Create message if there is new line character
+
     String dataString = String.fromCharCodes(buffer);
-    print(dataString);
+
     outputProtocol(dataString);
+
     return dataString;
     int index = buffer.indexOf(13);
   }
@@ -127,7 +133,7 @@ class BleProvider with ChangeNotifier {
   Future<void> getPairingList() async {
     await serial.getBondedDevices().then((List<BluetoothDevice> bondedDevices) {
       pairingDevices = bondedDevices
-          .where((element) => element.name!.contains('fouren'))
+          .where((element) => element.name!.contains('AgroSPM'))
           .toList();
     }).then((value) {
       findPairingDevices = true;
@@ -156,6 +162,7 @@ class BleProvider with ChangeNotifier {
     selectDevice = device;
     notifyListeners();
   }
+
 // void connectSensor() {
 //   BluetoothConnection.toAddress(selectDevice!.address).then((value) {
 //     connection = value;
@@ -170,9 +177,20 @@ class BleProvider with ChangeNotifier {
 //     });
 //   });
 // }
-  String outputText = "출력값이 없습니다.";
-  void outputProtocol(String str){
+  int outputDataLength = 0;
+
+  void outputProtocol(String str) {
+    outputList.add(str);
     outputText = str;
     notifyListeners();
+  }
+
+  String getOutputData() {
+    String data = '';
+    outputList.forEach((element) {
+      data += element;
+    });
+    outputDataLength = data.split(',').length;
+    return data;
   }
 }

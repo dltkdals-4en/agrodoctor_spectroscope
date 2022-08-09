@@ -1,5 +1,6 @@
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
+import 'package:ctgformanager/get_ble_devices.dart';
 import 'package:ctgformanager/providers/ble_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -64,6 +65,20 @@ class PairingListPage extends StatelessWidget {
                   separatorBuilder: (context, index) => Divider(),
                   itemCount: pairingDevices.length),
             ),
+            Container(
+              width: size.width,
+              height: 60,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GetBleDevices(),
+                      ));
+                },
+                child: Text('추가 기기 찾기'),
+              ),
+            )
           ],
         ),
       ),

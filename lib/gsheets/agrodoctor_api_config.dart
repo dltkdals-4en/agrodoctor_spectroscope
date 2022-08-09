@@ -14,4 +14,6 @@ class AgrodoctorApiConfig {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/agrodoctor-manager%40agrodoctor-358507.iam.gserviceaccount.com"
 }''';
   static final AgrodoctorGSheets = GSheets(_credentials);
+  static final String gsheetsId =
+      "1zHQ2lB68SSL49Ch_wiasz4CjPEDgwNm8OnCwmyTCgYY";
 }

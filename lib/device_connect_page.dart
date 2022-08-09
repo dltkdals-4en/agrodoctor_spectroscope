@@ -1,6 +1,7 @@
 import 'package:ctgformanager/contstants/constants.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:ctgformanager/providers/ble_provider.dart';
+import 'package:ctgformanager/providers/gsheets_provider.dart';
 import 'package:ctgformanager/providers/protocol_provider.dart';
 import 'package:ctgformanager/providers/setting_page_ui_provider.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,11 @@ class DeviceConnectPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var bleProvider = Provider.of<BleProvider>(context);
-
+    var gsheets = Provider.of<GsheetsProvider>(context);
     var prProvider = Provider.of<ProtocolProvider>(context);
     var size = MediaQuery.of(context).size;
-    var device = bleProvider.selectDevice;
-    print('111 ${device!.isConnected}');
+    BluetoothDevice device = bleProvider.selectDevice!;
+
     prProvider.setBleConnectedText(bleProvider.bleConnected);
     return Scaffold(
       appBar: AppBar(
@@ -27,10 +28,18 @@ class DeviceConnectPage extends StatelessWidget {
           onPressed: () {
             bleProvider.connection?.dispose();
             bleProvider.connection = null;
-            bleProvider.bleConnected =false;
+            bleProvider.bleConnected = false;
             Navigator.maybePop(context);
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              gsheets.insertData(prProvider.inputText, bleProvider.outputText);
+            },
+            icon: Icon(Icons.save),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -41,7 +50,10 @@ class DeviceConnectPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('${prProvider.bleConnected}'),
+                  Text(
+                    '${prProvider.bleConnected}',
+                    style: prProvider.bleConnectedStyle,
+                  ),
                   ElevatedButton(
                     onPressed: () async {
                       await bleProvider.connecteBle();
@@ -56,12 +68,15 @@ class DeviceConnectPage extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(width: 1, color: AppColors.lightPrimary),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('입력값 : ${prProvider.inputText}'),
-                    Text('출력값 : ${bleProvider.outputText}'),
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('입력값 : ${prProvider.inputText}'),
+                      Text('출력값 : ${bleProvider.outputText}'),
+                      Text(bleProvider.getOutputData()),
+                    ],
+                  ),
                 ),
               ),
               NorH,
