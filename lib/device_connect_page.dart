@@ -19,8 +19,9 @@ class DeviceConnectPage extends StatelessWidget {
     var prProvider = Provider.of<ProtocolProvider>(context);
     var size = MediaQuery.of(context).size;
     BluetoothDevice device = bleProvider.selectDevice!;
-
+    print(bleProvider.outputText);
     prProvider.setBleConnectedText(bleProvider.bleConnected);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${device.name}'),
@@ -64,7 +65,7 @@ class DeviceConnectPage extends StatelessWidget {
               ),
               Container(
                 width: size.width,
-                height: size.height / 3,
+                height: size.height / 2,
                 decoration: BoxDecoration(
                   border: Border.all(width: 1, color: AppColors.lightPrimary),
                 ),
@@ -73,8 +74,10 @@ class DeviceConnectPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('입력값 : ${prProvider.inputText}'),
-                      Text('출력값 : ${bleProvider.outputText}'),
-                      Text(bleProvider.getOutputData()),
+                      Text(
+                          '데이터 길이 : ${bleProvider.getOutputData().split(',').length}'),
+                      Text('데이터 값 : \n ${bleProvider.getOutputData()}'),
+                      // Text(bleProvider.getOutputData()),
                     ],
                   ),
                 ),
@@ -102,44 +105,52 @@ class DeviceConnectPage extends StatelessWidget {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        bleProvider.sendData('\$getSensorData()\r\n');
-                        prProvider.inputProtocol('\$getSensorData()\r\n');
-                      },
-                      child: Text('getSensorData'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
                         bleProvider.sendData('\$connectSensor()\r\n');
                         prProvider.inputProtocol('\$connectSensor()\r\n');
                       },
                       child: Text('connectSensor'),
                     ),
-                    SmH,
-                    Container(
-                      width: size.width,
-                      child: TextField(
-                        controller: prProvider.anyProtocol,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: AppColors.lightPrimary,
-                              width: 2,
-                            ),
-                          ),
-                          focusColor: AppColors.lightPrimary,
-                        ),
-                      ),
+                    ElevatedButton(
+                      onPressed: () {
+                        bleProvider.sendData('\$getSpectrumData()\r\n');
+                        prProvider.inputProtocol('\$getSpectrumSensor()\r\n');
+                      },
+                      child: Text('getSpectrum'),
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        prProvider.inputProtocol(
-                            '\$${prProvider.anyProtocol.value.text}');
-                        bleProvider
-                            .sendData('\$${prProvider.anyProtocol.value.text}');
+                        bleProvider.sendData('\$getXyzData()\r\n');
+                        prProvider.inputProtocol('\$getXyzData()\r\n');
                       },
-                      child: Text('any protocol'),
+                      child: Text('getXYZ'),
                     ),
+
+                    // SmH,
+                    // Container(
+                    //   width: size.width,
+                    //   child: TextField(
+                    //     controller: prProvider.anyProtocol,
+                    //     decoration: InputDecoration(
+                    //       border: OutlineInputBorder(),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderSide: BorderSide(
+                    //           color: AppColors.lightPrimary,
+                    //           width: 2,
+                    //         ),
+                    //       ),
+                    //       focusColor: AppColors.lightPrimary,
+                    //     ),
+                    //   ),
+                    // ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     prProvider.inputProtocol(
+                    //         '\$${prProvider.anyProtocol.value.text}');
+                    //     bleProvider
+                    //         .sendData('\$${prProvider.anyProtocol.value.text}');
+                    //   },
+                    //   child: Text('any protocol'),
+                    // ),
                   ],
                 ),
               ),

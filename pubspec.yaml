@@ -31,17 +31,16 @@ dependencies:
   fimber: ^0.6.1
   flutter_bluetooth_serial: ^0.4.0
   provider: ^6.0.0
-  shared_preferences: ^2.0.13
-  fluttertoast: ^8.0.9
   flutter_screenutil: ^5.5.3+2
   easy_localization: ^3.0.0
   flutter_launcher_icons: ^0.9.2
   rxdart: ^0.26.0
   rename: ^2.0.1
-  flutter_blue: ^0.8.0
   gsheets: ^0.4.2
   flutter_keyboard_size: ^1.0.0+4
-
+  shared_preferences: ^2.0.15
+  syncfusion_flutter_charts: ^20.2.44
+  fluttertoast: ^8.0.9
 dev_dependencies:
   flutter_test:
     sdk: flutter

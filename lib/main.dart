@@ -7,6 +7,7 @@ import 'package:ctgformanager/contstants/loading_widget.dart';
 import 'package:ctgformanager/contstants/screen_size.dart';
 import 'package:ctgformanager/get_pairing_devices.dart';
 import 'package:ctgformanager/providers/ble_provider.dart';
+import 'package:ctgformanager/providers/chart_data_provider.dart';
 import 'package:ctgformanager/providers/gsheets_provider.dart';
 import 'package:ctgformanager/providers/protocol_provider.dart';
 import 'package:ctgformanager/providers/setting_page_ui_provider.dart';
@@ -36,6 +37,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider<GsheetsProvider>(
           create: (_) =>GsheetsProvider(),
+        ),
+        ChangeNotifierProvider<ChartDataProvider>(
+          create: (_) => ChartDataProvider(),
         ),
       ],
       child: MyApp(),

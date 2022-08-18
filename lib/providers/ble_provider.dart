@@ -15,7 +15,7 @@ class BleProvider with ChangeNotifier {
   BluetoothConnection? connection;
   bool bleConnected = false;
   int? selectedIndex;
-  List<String>  outputList =[];
+  List<String> outputList = [];
   String outputText = "출력값이 없습니다.";
 
   void scanBle() {
@@ -55,19 +55,18 @@ class BleProvider with ChangeNotifier {
           print('블루투스 연결 실패');
         }
         connection!.input!.listen((event) {
-          outputList.clear();
-          if(outputList.isEmpty) {
-            _onDataReceived(event);
-            notifyListeners();
-          }
+          _onDataReceived(event);
+          // notifyListeners();
         });
+      }).catchError((e) {
+
+        print("error: $e");
       });
     } else {
-      print('none1');
       bleConnected = false;
       if (connection != null) {
         connection!.dispose();
-        print('none2');
+
         connection = null;
       }
       notifyListeners();
@@ -75,16 +74,15 @@ class BleProvider with ChangeNotifier {
   }
 
   Future<void> sendData(String str) async {
+    outputList.clear();
     String sendStr = '$str\r\n';
-    print(sendStr);
+    print('send $sendStr');
     var i = Uint8List.fromList(utf8.encode(sendStr));
 
     if (str.length > 0) {
-
       try {
         print('test');
         connection!.output.add(i);
-
         await connection!.output.allSent;
       } catch (e) {
         print(e);
@@ -96,7 +94,7 @@ class BleProvider with ChangeNotifier {
 
   String _onDataReceived(Uint8List data) {
     // Allocate buffer for parsed data
-    print('data : $data');
+
     int backspacesCounter = 0;
     data.forEach((byte) {
       if (byte == 8 || byte == 127) {
@@ -123,11 +121,31 @@ class BleProvider with ChangeNotifier {
     // Create message if there is new line character
 
     String dataString = String.fromCharCodes(buffer);
-
+    String dataString2 = String.fromCharCodes(data);
+    print('data $data');
+    print('buffer $buffer');
+    print('dataS $dataString2');
     outputProtocol(dataString);
 
     return dataString;
     int index = buffer.indexOf(13);
+  }
+
+  int outputDataLength = 0;
+
+  void outputProtocol(String str) {
+    outputList.add(str);
+    notifyListeners();
+  }
+
+  String getOutputData() {
+    String data = '';
+    outputList.forEach((element) {
+      data += element;
+    });
+
+    outputDataLength = data.split(',').length;
+    return data;
   }
 
   Future<void> getPairingList() async {
@@ -161,36 +179,5 @@ class BleProvider with ChangeNotifier {
   void setSelectedDivice(BluetoothDevice device) {
     selectDevice = device;
     notifyListeners();
-  }
-
-// void connectSensor() {
-//   BluetoothConnection.toAddress(selectDevice!.address).then((value) {
-//     connection = value;
-//     bleConnected = value.isConnected;
-//     if (bleConnected == true) {
-//       sendListData();
-//     } else {
-//       print('블루투스 연결 실패');
-//     }
-//     connection!.input!.listen((event) {
-//       _onDataReceived(event);
-//     });
-//   });
-// }
-  int outputDataLength = 0;
-
-  void outputProtocol(String str) {
-    outputList.add(str);
-    outputText = str;
-    notifyListeners();
-  }
-
-  String getOutputData() {
-    String data = '';
-    outputList.forEach((element) {
-      data += element;
-    });
-    outputDataLength = data.split(',').length;
-    return data;
   }
 }

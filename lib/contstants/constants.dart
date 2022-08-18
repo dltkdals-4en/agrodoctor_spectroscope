@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+
 class AppColors {
   static const Color primary = Color(0xFF006E51);
   static const Color lightPrimary = Color(0xFF00A862);
